@@ -1,0 +1,23 @@
+{
+  "name": "blog-ssr-vue-nuxt",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/content": "^2.13.4",
+    "nuxt": "^3.20.1",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@oxc-minify/binding-win32-x64-msvc": "^0.97.0",
+    "@oxc-parser/binding-win32-x64-msvc": "^0.97.0",
+    "@oxc-transform/binding-win32-x64-msvc": "^0.97.0"
+  }
+}

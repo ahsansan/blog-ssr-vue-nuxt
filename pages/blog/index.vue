@@ -5,12 +5,40 @@ const { data: articles } = await useAsyncData('articles', () =>
     .find()
 )
 
-// Mock categories data
-const categories = [
-  { name: 'Sleep', count: 25, image: '💤' },
-  { name: 'Stress', count: 14, image: '😰' },
-  { name: 'Mindfulness', count: 28, image: '🧘' }
-]
+// Compute real categories from articles
+const categories = computed(() => {
+  if (!articles.value) return []
+  
+  // Count articles per category
+  const categoryMap = new Map<string, { name: string; count: number; image: string }>()
+  
+  articles.value.forEach((article: any) => {
+    if (article.category) {
+      const categoryName = article.category
+      if (categoryMap.has(categoryName)) {
+        categoryMap.get(categoryName)!.count++
+      } else {
+        // Default emoji based on category name
+        let emoji = '📝'
+        if (categoryName.toLowerCase().includes('tutorial')) emoji = '📚'
+        if (categoryName.toLowerCase().includes('sleep')) emoji = '💤'
+        if (categoryName.toLowerCase().includes('stress')) emoji = '😰'
+        if (categoryName.toLowerCase().includes('mindfulness')) emoji = '🧘'
+        if (categoryName.toLowerCase().includes('health')) emoji = '💪'
+        if (categoryName.toLowerCase().includes('tech')) emoji = '💻'
+        
+        categoryMap.set(categoryName, {
+          name: categoryName,
+          count: 1,
+          image: emoji
+        })
+      }
+    }
+  })
+  
+  // Convert to array and sort by count (descending)
+  return Array.from(categoryMap.values()).sort((a, b) => b.count - a.count)
+})
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
@@ -66,7 +94,7 @@ useHead({
       <section class="categories-section">
         <div class="section-header">
           <h2>Top categories</h2>
-          <span class="badge">10</span>
+          <span class="badge">{{ categories.length }}</span>
           <button class="see-all">
             See all
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
